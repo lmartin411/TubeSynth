@@ -1,0 +1,51 @@
+#include <CapacitiveSensor.h>
+#include "pitches.h"
+
+const int speaker = 13; 
+CapacitiveSensor sensor1 = CapacitiveSensor(4, 3);
+CapacitiveSensor sensor2 = CapacitiveSensor(6, 5);
+CapacitiveSensor sensor3 = CapacitiveSensor(8, 7);
+CapacitiveSensor sensor4 = CapacitiveSensor(10, 9);
+CapacitiveSensor sensor5 = CapacitiveSensor(12, 11);
+int threshold = 200;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  //assigning values to sensor readings
+  long sensorValue[5];
+  sensorValue[0] = sensor1.capacitiveSensor(30);
+  sensorValue[1] = sensor2.capacitiveSensor(30);
+  sensorValue[2] = sensor3.capacitiveSensor(30);
+  sensorValue[3] = sensor4.capacitiveSensor(30);
+  sensorValue[4] = sensor5.capacitiveSensor(30);
+  
+  //notes assigned to keys
+  int tones[5];
+  tones[0] = NOTE_C4;
+  tones[1] = NOTE_CS4;
+  tones[2] = NOTE_D4;
+  tones[3] = NOTE_DS4;
+  tones[4] = NOTE_E4;
+  
+  boolean bl = false;
+  
+  //are any of the sensors being touched
+  /*
+  also needs to be changed if the array doesn't
+  work; you can just copy paste again
+  */
+  for (int i = 0; i < 6; i++) {
+    //if so, play associated tone
+    if (sensorValue[i] > threshold) {
+        tone(speaker, tones[i]);
+        bl = true;
+    }
+  }
+  //no keys pressed, no sound
+  if (!bl) {
+    noTone(speaker);
+  }
+}
